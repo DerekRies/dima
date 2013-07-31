@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Dima Demo 1</title>
+  </head>
+  <body>
+    <div style="width: 960px; margin: 0 auto;">
+      <h1>Dima Demo #1</h1>
+      <canvas width="900" height="600" style="border: 1px solid #ebebeb;" id="myGame"></canvas>
+    </div>
+
+    <script src="../src/core.js"></script>
+    <script>
+
+    (function() {
+        var lastTime = 0;
+        var vendors = ['webkit', 'moz'];
+        for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+            window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+            window.cancelAnimationFrame =
+              window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+        }
+
+        if (!window.requestAnimationFrame)
+            window.requestAnimationFrame = function(callback, element) {
+                var currTime = new Date().getTime();
+                var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+                  timeToCall);
+                lastTime = currTime + timeToCall;
+                return id;
+            };
+
+        if (!window.cancelAnimationFrame)
+            window.cancelAnimationFrame = function(id) {
+                clearTimeout(id);
+            };
+    }());
+
+
+      dima.system('Movement', function () {
+        return {
+          requires: ['transform', 'velocity'],
+          process: function (collection) {
+            for(var i = 0; i < collection.length ; i += 2) {
+              collection[i].x = collection[i].x + collection[i + 1].x | 0;
+              collection[i].y = collection[i].y + collection[i + 1].y | 0;
+            }
+          }
+        };
+      });
+
+      dima.system('Rendering', function () {
+        return {
+          requires: ['transform', 'renderable'],
+          process: function (collection) {
+            var ctx = dima.getContext();
+            ctx.clearRect(0,0,900,600);
+            for(var i = 0; i < collection.length ; i += 2){
+              ctx.beginPath();
+              ctx.arc(collection[i].x, collection[i].y, collection[i + 1].radius, 0, Math.PI * 2, true);
+              ctx.fill();
+            }
+          }
+        };
+      });
+
+      dima.system('Bounds', function () {
+        return {
+          requires: ['transform', 'velocity', 'boundable'],
+          process: function (collection) {
+            for(var i = 0 ; i < collection.length ; i+=3){
+              var transform = collection[i],
+                  velocity = collection[i+1],
+                  boundable = collection[i+2];
+              if(transform.x >= boundable.x + boundable.width || transform.x <= boundable.x){
+                velocity.x *= -1;
+              }
+              if(transform.y >= boundable.y + boundable.height || transform.y <= boundable.y) {
+                velocity.y *= -1;
+              }
+            }
+          }
+        }
+      });
+
+      dima.system('Another', function () {
+        return {
+          requires: ['transform', 'velocity', 'boundable', 'test'],
+          process: function (collection) {
+
+          }
+        };
+      })
+
+      dima.component('test', function () {
+        var testComponent = function () {
+          this.word = 'this is a test';
+        };
+        testComponent.prototype.set = function(word) {
+          this.word = word;
+        };
+        return testComponent;
+      });
+
+      dima.component('boundable', function () {
+        var boundableComponent = function () {
+          this.x = 0;
+          this.y = 0;
+          this.width = 0;
+          this.height = 0;
+        }
+        boundableComponent.prototype.set = function(x, y, width, height) {
+          this.x = x;
+          this.y = y;
+          this.width = width;
+          this.height = height;
+        };
+        return boundableComponent;
+      });
+
+      dima.component('transform', function () {
+        var transformComponent = function () {
+          this.x = 0;
+          this.y = 0;
+          this.rotation = 0;
+        }
+        transformComponent.prototype.setPosition = function(x,y) {
+          this.x = x;
+          this.y = y;
+          return this;
+        };
+        transformComponent.prototype.setRotation = function(theta) {
+          this.rotation = theta;
+          return this;
+        };
+        transformComponent.prototype.setRotationDegrees = function(thetaDegrees) {
+          this.rotation = Math.PI / 180 * thetaDegrees;
+        };
+        return transformComponent;
+      });
+
+      dima.component('velocity', function () {
+        var velocityComponent = function () {
+          this.x = 0;
+          this.y = 0;
+        };
+        velocityComponent.prototype.set = function(x,y) {
+          this.x = x;
+          this.y = y;
+        };
+        return velocityComponent;
+      });
+
+      dima.component('renderable', function () {
+        var renderableComponent = function () {
+          this.radius = 0;
+        };
+        renderableComponent.prototype.setRadius = function(rad) {
+          this.radius = rad;
+        };
+        return renderableComponent;
+      });
+
+      dima.game(document.getElementById('myGame'), function () {
+
+        // console.log(dima);
+        dima.addSystem('Movement');
+        dima.addSystem('Rendering');
+        dima.addSystem('Bounds');
+
+        var playerEntity = dima.createEntity();
+        var anotherEntity = dima.createEntity();
+        dima.attachComponentTo('transform', playerEntity)
+          .setPosition(200,50)
+          .setRotation(1.5);
+        dima.attachComponentTo('velocity', playerEntity)
+          .set(1,Math.random() * 5 - 2.5);
+        dima.attachComponentTo('renderable', playerEntity)
+          .setRadius(25);
+        dima.attachComponentTo('boundable', playerEntity)
+          .set(0,0,300,300);
+        dima.attachComponentTo('test', playerEntity)
+          .set('this is the player entity');
+
+        dima.attachComponentTo('transform', anotherEntity)
+          .setPosition(250, 250)
+          .setRotation(3.14);
+        dima.attachComponentTo('velocity', anotherEntity)
+          .set(5,2);
+        dima.attachComponentTo('renderable', anotherEntity)
+          .setRadius(20);
+        dima.attachComponentTo('boundable', anotherEntity)
+          .set(0,0,700,400);
+
+        // setInterval(function () {
+        //   dima.getComponent('renderable', anotherEntity)
+        //     .setRadius(Math.floor(Math.random() * 40) + 1);
+        // }, 500);
+
+        function update () {
+          dima.update();
+          requestAnimationFrame(update);
+        }
+
+        update();
+
+      });
+
+    </script>
+  </body>
+</html>
