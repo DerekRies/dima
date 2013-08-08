@@ -3,8 +3,9 @@
 
   var EntityComponentManager = function () {
     this.table = [];
-    this.componentMap = {};
-    this.componentEnum = {};
+    this.componentMap = {}; // lookup a component and get its definition
+    this.componentEnum = {}; // convert component into an index in the table
+    this.componentPool = [];
     this.queryCache = {};
     this.entityCounter = 0;
   };
@@ -19,15 +20,36 @@
     }
   };
 
+  EntityComponentManager.prototype.destroyEntity = function(entity) {
+    // body...
+    for (var i = 0, l = this.table.length ; i < l ; i++){
+      // this.componentPool[i].push(this.table[i].splice(entity, 1, undefined));
+      delete this.table[i][entity];
+    }
+    // this.queryCache = {};
+    // console.log("COMPONENT POOL: ", this.componentPool);
+  };
+
   EntityComponentManager.prototype.attachComponentTo = function(componentType, entity) {
     // TODO: Invalidate caches where possible
     if(typeof this.componentMap[componentType] !== 'undefined'){
-      this.table[this.componentEnum[componentType]][entity] = new this.componentMap[componentType]();
+      if(this.componentPool[this.componentEnum[componentType]].length > 0) {
+        this.table[this.componentEnum[componentType]][entity] = this.componentPool[this.componentEnum[componentType]].pop();
+      }
+      else {
+        this.table[this.componentEnum[componentType]][entity] = new this.componentMap[componentType]();
+      }
       return this.table[this.componentEnum[componentType]][entity];
     }
     else {
       throw new Error('Component of type: ' + componentType + ' is undefined');
     }
+  };
+
+  EntityComponentManager.prototype.removeComponentFrom = function(componentType, entity) {
+    // body...
+    // should remove the component from table[componentType][entity] and put it in the component pool
+    delete this.table[this.componentEnum[componentType]][entity];
   };
 
   EntityComponentManager.prototype.getComponent = function(componentType, entity) {
@@ -36,8 +58,8 @@
   };
 
   EntityComponentManager.prototype.defineComponent = function(componentType, data) {
-    // window.console.log('creating', componentType);
     var columnIndex = this.table.push([]) - 1;
+    this.componentPool.push([]);
     this.componentEnum[componentType] = columnIndex;
     this.componentMap[componentType] = data();
     this.componentMap[componentType].prototype.type = componentType;
@@ -119,6 +141,7 @@
     resetSystemQueryCache: function (system) {
       var key = this.definedSystems[system].requires.toString();
       delete this.ecManager.queryCache[key];
+      return this;
     },
 
     component: function (componentType, data) {
@@ -143,12 +166,27 @@
       return this.ecManager.attachComponentTo(componentType, entity);
     },
 
+    removeComponentFrom: function (componentType, entity) {
+      return this.ecManager.removeComponentFrom(componentType, entity);
+    },
+
     getComponent: function (componentType, entity) {
       return this.ecManager.getComponent(componentType, entity);
     },
 
     createEntity: function (assemblage) {
       return this.ecManager.createEntity(assemblage);
+    },
+
+    destroyEntity: function (entity) {
+      return this.ecManager.destroyEntity(entity);
+    },
+
+    reset: function () {
+      // this function is for testing purposes only to reset the entirety of dima
+      this.activeSystems = [];
+      this.definedSystems = {};
+      this.ecManager = new EntityComponentManager();
     }
 
 

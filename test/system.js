@@ -1,22 +1,24 @@
 'use strict';
 
 var dima = window.dima;
+// dima.reset();
 
-dima.system('SystemTestSystem', function () {
-  return {
-    requires: [],
-    process: function (collection) {}
-  };
-});
-
-dima.system('DecoySystem', function () {
-  return {
-    requires: [],
-    process: function (collection) {}
-  };
-});
 
 describe('System Creation', function () {
+
+  dima.system('SystemTestSystem', function () {
+    return {
+      requires: [],
+      process: function (collection) {}
+    };
+  });
+
+  dima.system('DecoySystem', function () {
+    return {
+      requires: [],
+      process: function (collection) {}
+    };
+  });
 
   var size = dima.activeSystems.length;
 
@@ -45,7 +47,7 @@ describe('System Creation', function () {
       }
     }
     expect(found).toBe(false);
-
   });
+
 
 });
