@@ -43,7 +43,7 @@ describe('Entity Management', function () {
   });
 
   it('should create a component definition', function () {
-    // console.log(dima.ecManager.componentMap);
+     expect(dima.ecManager.componentMap['velocity']).not.toEqual(undefined);
   });
 
   it('should attach a component to an entity', function () {
@@ -54,6 +54,7 @@ describe('Entity Management', function () {
 
   it('should delete components from the table when deleting an entity', function () {
     var destroyed = true;
+    console.log('destroying the entity entity');
     dima.destroyEntity(entity);
     for(var componentType = 0 ; componentType < dima.ecManager.table.length ; componentType++) {
       destroyed = dima.ecManager.table[componentType][entity] === undefined;
@@ -74,7 +75,8 @@ describe('Entity Management', function () {
   it('should add removed components to a pool where they can be recycled', function () {
     dima.attachComponentTo('transform', thirdEntity)
       .setPosition(1337, 1337);
-    dima.destroyEntity('transform', thirdEntity);
+    console.log('destroying the third entity');
+    dima.destroyEntity(thirdEntity);
     // this next component should be recycled and still have the old positions
     var recycledComponent = dima.attachComponentTo('transform', secondEntity);
     expect(recycledComponent.x).toBe(1337);

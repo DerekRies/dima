@@ -6,14 +6,16 @@
     this.componentMap = {}; // lookup a component and get its definition
     this.componentEnum = {}; // convert component into an index in the table
     this.componentPool = [];
+    this.entityPool = [];
     this.queryCache = {};
     this.entityCounter = 0;
   };
 
   EntityComponentManager.prototype.createEntity = function(assemblage) {
     if(typeof assemblage !== 'string') {
-      // window.console.log('basic entity with id');
-      return this.entityCounter++;
+      // naive implementation is to just continuously incrementing the counter
+      // another idea is to reuse the numbers (ids) of previously deleted entities before incrementing. But is this even worth it? Have to remember which numbers were deleted and then check if we can reuse numbers before falling back to incrementing. If done with naive implementation then it is likely there will be some array resizing concerns in the javascript jits.
+      return this.entityPool.pop() || this.entityCounter++;
     }
     else {
       // window.console.log('create entity from assemblage');
@@ -21,13 +23,16 @@
   };
 
   EntityComponentManager.prototype.destroyEntity = function(entity) {
-    // body...
-    for (var i = 0, l = this.table.length ; i < l ; i++){
-      // this.componentPool[i].push(this.table[i].splice(entity, 1, undefined));
-      delete this.table[i][entity];
+    // Easiest just to delete the entire cache, as entities can have many
+    // components. In the future would like to more intelligently invalidate
+    // the cache.
+    for (var i = this.table.length; i-- ; ){
+      if(this.table[i][entity] !== undefined){
+        this.componentPool[i].push(this.table[i].splice(entity,1,undefined)[0]);
+      }
     }
-    // this.queryCache = {};
-    // console.log("COMPONENT POOL: ", this.componentPool);
+    this.entityPool.push(entity);
+    this.queryCache = {};
   };
 
   EntityComponentManager.prototype.attachComponentTo = function(componentType, entity) {
@@ -39,6 +44,7 @@
       else {
         this.table[this.componentEnum[componentType]][entity] = new this.componentMap[componentType]();
       }
+      this.clearSystemCacheForComponent(componentType);
       return this.table[this.componentEnum[componentType]][entity];
     }
     else {
@@ -46,14 +52,12 @@
     }
   };
 
-  EntityComponentManager.prototype.removeComponentFrom = function(componentType, entity) {
-    // body...
-    // should remove the component from table[componentType][entity] and put it in the component pool
-    delete this.table[this.componentEnum[componentType]][entity];
+  EntityComponentManager.prototype.removeComponentFrom =  function(componentType, entity) {
+    this.componentPool[this.componentEnum[componentType]].push(this.table[this.componentEnum[componentType]].splice(entity,1,undefined)[0]);
+    this.clearSystemCacheForComponent(componentType);
   };
 
   EntityComponentManager.prototype.getComponent = function(componentType, entity) {
-    // body...
     return this.table[this.componentEnum[componentType]][entity];
   };
 
@@ -63,6 +67,12 @@
     this.componentEnum[componentType] = columnIndex;
     this.componentMap[componentType] = data();
     this.componentMap[componentType].prototype.type = componentType;
+  };
+
+  EntityComponentManager.prototype.clearSystemCacheForComponent = function(componentType) {
+    // TODO: Needs to clear the cache for any systems that require this
+    // component type.
+    this.queryCache = {};
   };
 
   EntityComponentManager.prototype.query = function(dependencies, key) {
@@ -151,7 +161,7 @@
 
     update: function () {
       var collectionInjection;
-      for(var i = 0; i < this.activeSystems.length ; i++) {
+      for(var i = 0, l = this.activeSystems.length ; i < l ; i++) {
         collectionInjection = this.ecManager.query(this.activeSystems[i].requires, this.activeSystems[i].requiresString);
         if(typeof collectionInjection !== 'undefined'){
           this.activeSystems[i].process(collectionInjection);
@@ -188,8 +198,6 @@
       this.definedSystems = {};
       this.ecManager = new EntityComponentManager();
     }
-
-
   };
 
   dima.ecManager = new EntityComponentManager();
