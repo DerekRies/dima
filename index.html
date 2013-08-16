@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Dima.js - HTML5 Game Framework</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/github.css">
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+        <div class="navbar navbar-static-top navbar-inverse">
+            <div class="navbar-inner">
+              <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="#">Dima.js</a>
+                <div class="nav-collapse">
+                  <ul class="nav pull-right">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#">Demos</a></li>
+                    <li><a href="#">Arcade</a></li>
+                    <li><a href="#">Docs</a></li>
+                    <li><a href="#">Modules</a></li>
+                    <li><a href="#">Github</a></li>
+                    <li><a href="#">Download</a></li>
+                  </ul>
+                </div><!-- /.nav-collapse -->
+              </div>
+            </div><!-- /navbar-inner -->
+          </div><!-- /navbar -->
+
+
+          <div class="hero-unit">
+              <div class="container">
+                  <h1>Dima.js</h1>
+                  <p class="lead">An open-source, high-performance, <strong>HTML5 game framework</strong> with an emphasis on entity-system architectures and test driven development.</p>
+                  <a href="download.html" class="btn btn-primary btn-large">Download Dima.js <small class="version-tag">v0.1.0</small></a>
+                  <a href="#" class="btn btn-large btn-success">Learn To Make Your Own Games</a>
+              </div>
+          </div>
+
+          <div class="container">
+              <h2>About</h2>
+              <p>Dima.js is a game framework for making games in Javascript and HTML5. Dima makes building games of medium to large scale easier than ever.</p>
+              <p>At its core is a super light-weight framework that provides the structure for your games, and it's fine if that's all you choose to use but Dima also comes with (if you so choose) a large collection of modules that include various components and systems for common game development needs. The core is an entity-system architecture framework that let's you avoid the common pitfalls of a traditional OOP inheritence based game by separating out your game into entities, components, and systems.</p>
+              <ul>
+                  <li><strong>entities:</strong> are just an identifier to a bag of components. They contain no logic or data.</li>
+                  <li><strong>components:</strong> are just bags of data that can be attached to entities. They contain no logic apart from possible getters/setters.</li>
+                  <li><strong>systems:</strong> are the machines that process the data of specific components</li>
+              </ul>
+              <br>
+              <h4>Why would I want to use an entity-system architecture over a traditional OOP-based one?</h4>
+              <p>Others have already written some amazing articles online about the numerous advantages of an Entity-System architecture that if you haven't read would be a good introduction.</p>
+              <ul>
+                  <li><a href="http://www.richardlord.net/blog/why-use-an-entity-framework">Why Use an Entity Framework - Richard Lord</a></li>
+                  <li><a href="http://cowboyprogramming.com/2007/01/05/evolve-your-heirachy/">Evolve Your Hierarchy</a></li>
+                  <li><a href="http://t-machine.org/index.php/2007/09/03/entity-systems-are-the-future-of-mmog-development-part-1/">Entity Systems are the future of MMOG development - Part 1</a></li>
+              </ul>
+              <p>To summarize entity system architectures let you be entirely flexible with the entities of your game without having to know their final structure.</p>
+              <hr>
+              <h2>Features</h2>
+              <div class="row">
+                <ul class="thumbnails">
+                    <li class="span4">
+                        <div class="thumbnail">
+                            <div class="caption">
+                                <h4>Test Driven</h4>
+                                <p>Automated testing is important to development and Dimas modular structure helps promote easier testing of your code.</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="span4">
+                        <div class="thumbnail">
+                            <div class="caption">
+                                <h4>High Performance</h4>
+                                <p>Dima is one of the first JavaScript game engines to support multi-threading with WebWorkers and graphics backends for canvas or WebGL.</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="span4">
+                        <div class="thumbnail">
+                            <div class="caption">
+                                <h4>Lightweight & Modular</h4>
+                                <p>Dima's core is very small at 3KB, and is enough to provide your game with the structure it needs. Dima also comes with other modules that are easy to use.</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="span4">
+                        <div class="thumbnail">
+                            <div class="caption">
+                                <h4>Tooling</h4>
+                                <p>Dima comes with tooling support in the form of bower and component packages, yeoman generators, and it's own command line tool.</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="span4">
+                        <div class="thumbnail">
+                            <div class="caption">
+                                <h4>UI Data-binding</h4>
+                                <p>Easily set up your UI to bind to certain state in your game and never have to write any update drawing methods</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="span4">
+                        <div class="thumbnail">
+                            <div class="caption">
+                                <h4>Game AI</h4>
+                                <p>Dima ships with several AI modules capable of pathfinding, modeling decisions by utility, and Machine Learning.</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="span4">
+                        <div class="thumbnail">
+                            <div class="caption">
+                                <h4>Tiled Map Support</h4>
+                                <p>Dima lets you load the map files created with the great 2d level editing tool, Tiled.</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="span4">
+                        <div class="thumbnail">
+                            <div class="caption">
+                                <h4>Persistence</h4>
+                                <p>Because the entity-system architecture is a relational model and entirely data driven, saving games is simple and easy.</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="span4">
+                        <div class="thumbnail">
+                            <div class="caption">
+                                <h4>Tons of other great modules</h4>
+                                <p>Dima has many other official as well as community developed modules <a href="#" >View More</a></p>
+
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+              </div>
+              <hr>
+              <h2>Code Sample</h2>
+            <br>
+              <h4>Defining a Component</h4>
+<pre class="prettyprint">
+dima.component('velocity', function () {
+  var velocityComponent = function () {
+    this.x = 0;
+    this.y = 0;
+  };
+  velocityComponent.prototype.set = function(x,y) {
+    this.x = x;
+    this.y = y;
+  };
+  return velocityComponent;
+});
+</pre>
+            <br>
+              <h4>Attaching a Component To an Entity</h4>
+<pre class="prettyprint">
+var playerEntity = dima.createEntity();
+dima.attachComponentTo('velocity', playerEntity)
+  .set(1,0);
+</pre>
+            <br>
+              <h4>Defining a System</h4>
+<pre class="prettyprint">
+dima.system('Movement', function () {
+    return {
+      requires: ['transform', 'velocity'],
+      process: function (collection) {
+        var transform, velocity;
+        for(var i = 0; i < collection.length ; i += 2) {
+          transform = collection[i];
+          velocity = collection[i+1];
+          transform.x += velocity.x;
+          transform.y += velocity.y;
+        }
+      }
+    };
+  });
+</pre>
+              <hr>
+              <h2>Open Source</h2>
+              <p>Dima.js is an entirely open source project that you can contribute to in a variety of ways:</p>
+              <ul>
+                  <li>Writing Documentation & Tutorials</li>
+                  <li>Hacking on the Core and Official Modules</li>
+                  <li>Developing your own modules and sharing them with the community</li>
+                  <li><strong>By making an awesome game with Dima.js</strong></li>
+              </ul>
+              <hr>
+          </div>
+
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+        <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src='//www.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>
