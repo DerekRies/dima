@@ -39,7 +39,10 @@
     // TODO: Invalidate caches where possible
     if(typeof this.componentMap[componentType] !== 'undefined'){
       if(this.componentPool[this.componentEnum[componentType]].length > 0) {
-        this.table[this.componentEnum[componentType]][entity] = this.componentPool[this.componentEnum[componentType]].pop();
+        // Reuse old component, but reset its state.
+        var component = this.componentPool[this.componentEnum[componentType]].pop();
+        this.componentMap[componentType].call(component);
+        this.table[this.componentEnum[componentType]][entity] = component;
       }
       else {
         this.table[this.componentEnum[componentType]][entity] = new this.componentMap[componentType]();
