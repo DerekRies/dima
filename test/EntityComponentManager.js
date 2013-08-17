@@ -1,35 +1,34 @@
 'use strict';
 
-var dima = window.dima;
-dima.reset();
-
-dima.component('transform', function () {
-  var transformComponent = function () {
-    this.x = 0;
-    this.y = 0;
-    this.rotation = 0;
-  };
-  transformComponent.prototype.setPosition = function(x, y) {
-    this.x = x;
-    this.y = y;
-  };
-  return transformComponent;
-});
-
-dima.component('velocity', function () {
-  var velocityComponent = function () {
-    this.x = 0;
-    this.y = 0;
-  };
-  velocityComponent.prototype.set = function(x,y) {
-    this.x = x;
-    this.y = y;
-  };
-  return velocityComponent;
-});
-// console.log(dima.ecManager.componentMap);
-
 describe('Entity Management', function () {
+
+  var dima = window.dima;
+
+  dima.component('transform', function () {
+    var transformComponent = function () {
+      this.x = 0;
+      this.y = 0;
+      this.rotation = 0;
+    };
+    transformComponent.prototype.setPosition = function(x, y) {
+      this.x = x;
+      this.y = y;
+    };
+    return transformComponent;
+  });
+
+  dima.component('velocity', function () {
+    var velocityComponent = function () {
+      this.x = 0;
+      this.y = 0;
+    };
+    velocityComponent.prototype.set = function(x,y) {
+      this.x = x;
+      this.y = y;
+    };
+    return velocityComponent;
+  });
+  // console.log(dima.ecManager.componentMap);
 
 
   var entity = dima.createEntity();

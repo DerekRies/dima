@@ -197,6 +197,34 @@
       this.activeSystems = [];
       this.definedSystems = {};
       this.ecManager = new EntityComponentManager();
+      console.log('resetting dima state');
+      this.testInfo();
+    },
+
+    testInfo: function () {
+      console.log('-------------------');
+      console.log('DEFINED SYSTEMS:');
+      for(var sys in this.definedSystems) {
+        console.log(sys);
+      }
+      console.log('-------------------');
+      console.log('ACTIVE SYSTEMS:');
+      this.activeSystems.forEach(function(system) {
+        console.log(system);
+      });
+      console.log('-------------------');
+      console.log('COMPONENTS');
+      for(var i = 0 ; i < this.ecManager.table.length ; i++) {
+        for(var j = 0 ; j < this.ecManager.table[i].length ; j++) {
+          if(typeof this.ecManager.table[i][j] === 'undefined'){
+            console.log('no component');
+          }
+          else {
+            console.log(this.ecManager.table[i][j].type);
+          }
+        }
+      }
+      console.log('-------------------');
     }
   };
 
