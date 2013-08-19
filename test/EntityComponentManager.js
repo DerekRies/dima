@@ -72,13 +72,13 @@ describe('Entity Management', function () {
   });
 
   it('should add removed components to a pool where they can be recycled', function () {
-    dima.attachComponentTo('transform', thirdEntity)
-      .setPosition(1337, 1337);
+    var oldComponent = dima.attachComponentTo('transform', thirdEntity);
+    oldComponent.setPosition(1337, 1337);
     console.log('destroying the third entity');
     dima.destroyEntity(thirdEntity);
-    // this next component should be recycled and still have the old positions
+    // This next component should be recycled, but should have been reset to the default state.
     var recycledComponent = dima.attachComponentTo('transform', secondEntity);
-    expect(recycledComponent.x).toBe(1337);
+    expect(recycledComponent).toBe(oldComponent);
+    expect(recycledComponent.x).toBe(0);
   });
-
 });
