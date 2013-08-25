@@ -9,6 +9,7 @@
       <canvas width="900" height="600" style="border: 1px solid #ebebeb;" id="myGame"></canvas>
     </div>
 
+    <script src="../src/entitycomponentmanager.js"></script>
     <script src="../src/core.js"></script>
     <script>
 
@@ -54,7 +55,7 @@
         return {
           requires: ['transform', 'renderable'],
           process: function (collection) {
-            var ctx = dima.getContext();
+            var ctx = dima.getRenderContext();
             ctx.clearRect(0,0,900,600);
             for(var i = 0; i < collection.length ; i += 2){
               ctx.beginPath();
@@ -83,15 +84,6 @@
           }
         }
       });
-
-      dima.system('Another', function () {
-        return {
-          requires: ['transform', 'velocity', 'boundable', 'test'],
-          process: function (collection) {
-
-          }
-        };
-      })
 
       dima.component('test', function () {
         var testComponent = function () {
@@ -162,6 +154,19 @@
         return renderableComponent;
       });
 
+      dima.assemblage('EnemyMine', function (e) {
+        dima.attachComponentTo('transform', e)
+          .setPosition(Math.floor(Math.random()*500), Math.floor(Math.random()*500))
+          .setRotation(3.14);
+        dima.attachComponentTo('velocity', e)
+          .set(Math.random() * 5 - 2.5, Math.random() * 5 - 2.5);
+        dima.attachComponentTo('renderable', e)
+          .setRadius(10 + Math.floor(Math.random()*20));
+        dima.attachComponentTo('boundable', e)
+          .set(0,0,700,400);
+        return e;
+      });
+
       dima.game(document.getElementById('myGame'), function () {
 
         // console.log(dima);
@@ -170,7 +175,6 @@
         dima.addSystem('Bounds');
 
         var playerEntity = dima.createEntity();
-        var anotherEntity = dima.createEntity();
         dima.attachComponentTo('transform', playerEntity)
           .setPosition(200,50)
           .setRotation(1.5);
@@ -183,15 +187,10 @@
         dima.attachComponentTo('test', playerEntity)
           .set('this is the player entity');
 
-        dima.attachComponentTo('transform', anotherEntity)
-          .setPosition(250, 250)
-          .setRotation(3.14);
-        dima.attachComponentTo('velocity', anotherEntity)
-          .set(5,2);
-        dima.attachComponentTo('renderable', anotherEntity)
-          .setRadius(20);
-        dima.attachComponentTo('boundable', anotherEntity)
-          .set(0,0,700,400);
+        // using assemblages
+        var mineOne = dima.createEntity('EnemyMine');
+        var mineOne = dima.createEntity('EnemyMine');
+        var mineOne = dima.createEntity('EnemyMine');
 
         // setInterval(function () {
         //   dima.getComponent('renderable', anotherEntity)

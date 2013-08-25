@@ -2,7 +2,11 @@ module.exports = function (config) {
   config.set({
     basePath: '.',
     frameworks: ['jasmine'],
-    files: ['src/*.js', 'test/*.js'],
+    files: [
+        'src/entitycomponentmanager.js',
+        'src/core.js',
+        'test/*.js'
+    ],
     reporters: ['progress'],
     port: 9876,
     runnerPort: 9100,

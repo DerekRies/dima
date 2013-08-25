@@ -1,0 +1,10 @@
+{
+  "name": "dima",
+  "version": "0.0.0",
+  "main": "src/core/main.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ]
+}
