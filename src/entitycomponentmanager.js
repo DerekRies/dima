@@ -18,7 +18,7 @@ EntityComponentManager.prototype.createEntity = function(assemblage) {
   }
   else {
     if(this.entityAssemblages.hasOwnProperty(assemblage)) {
-      this.entityAssemblages[assemblage](e);
+      return this.entityAssemblages[assemblage](e);
     }
   }
 };

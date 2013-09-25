@@ -30,6 +30,13 @@ describe('Entity Management', function () {
   });
   // console.log(dima.ecManager.componentMap);
 
+  var componentsToAttachToAssemblage = ['velocity', 'transform'];
+  dima.assemblage('EnemyMine', function (e) {
+    for(var i = 0 ; i < componentsToAttachToAssemblage.length ; i++){
+      dima.attachComponentTo(componentsToAttachToAssemblage[i], e);
+    }
+    return e;
+  });
 
   var entity = dima.createEntity();
   var secondEntity = dima.createEntity();
@@ -80,5 +87,11 @@ describe('Entity Management', function () {
     var recycledComponent = dima.attachComponentTo('transform', secondEntity);
     expect(recycledComponent).toBe(oldComponent);
     expect(recycledComponent.x).toBe(0);
+  });
+
+  it('should create an entity with components already attached according to the assemblage definition', function () {
+    var assemblageEntity = dima.createEntity('EnemyMine');
+    var assemblageComponents = dima.getComponents(assemblageEntity);
+    expect(assemblageComponents.length).toEqual(componentsToAttachToAssemblage.length);
   });
 });
